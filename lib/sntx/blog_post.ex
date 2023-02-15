@@ -32,13 +32,15 @@ defmodule Sntx.BlogPost do
   end
 
   def list do
-    Repo.all(__MODULE__)
+    __MODULE__
+    |> Repo.all()
+    |> Repo.preload([:author])
   end
 
   def get(id) do
     case Repo.get_by(__MODULE__, id: id) do
       nil -> {:error, dgettext("global", "Blog Post not found")}
-      blog_post -> {:ok, blog_post}
+      blog_post -> {:ok, Repo.preload(blog_post, [:author])}
     end
   end
 end
