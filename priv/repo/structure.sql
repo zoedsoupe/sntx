@@ -49,30 +49,13 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.blog_posts (
-    id bigint NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     title character varying(255) NOT NULL,
     body character varying(255) NOT NULL,
-    author_id uuid NOT NULL
+    author_id uuid NOT NULL,
+    inserted_at timestamp(0) without time zone NOT NULL,
+    updated_at timestamp(0) without time zone NOT NULL
 );
-
-
---
--- Name: blog_posts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.blog_posts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: blog_posts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.blog_posts_id_seq OWNED BY public.blog_posts.id;
 
 
 --
@@ -124,13 +107,6 @@ CREATE TABLE public.user_tokens (
     inserted_at timestamp(0) without time zone NOT NULL,
     updated_at timestamp(0) without time zone NOT NULL
 );
-
-
---
--- Name: blog_posts id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.blog_posts ALTER COLUMN id SET DEFAULT nextval('public.blog_posts_id_seq'::regclass);
 
 
 --
