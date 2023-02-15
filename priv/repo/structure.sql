@@ -45,6 +45,37 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: blog_posts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.blog_posts (
+    id bigint NOT NULL,
+    title character varying(255) NOT NULL,
+    body character varying(255) NOT NULL,
+    author_id uuid NOT NULL
+);
+
+
+--
+-- Name: blog_posts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.blog_posts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: blog_posts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.blog_posts_id_seq OWNED BY public.blog_posts.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -96,6 +127,21 @@ CREATE TABLE public.user_tokens (
 
 
 --
+-- Name: blog_posts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.blog_posts ALTER COLUMN id SET DEFAULT nextval('public.blog_posts_id_seq'::regclass);
+
+
+--
+-- Name: blog_posts blog_posts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.blog_posts
+    ADD CONSTRAINT blog_posts_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -120,10 +166,25 @@ ALTER TABLE ONLY public.user_tokens
 
 
 --
+-- Name: blog_posts_title_index; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX blog_posts_title_index ON public.blog_posts USING btree (title);
+
+
+--
 -- Name: user_accounts__lower_email_index; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX user_accounts__lower_email_index ON public.user_accounts USING btree (lower((email)::text));
+
+
+--
+-- Name: blog_posts id; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.blog_posts
+    ADD CONSTRAINT id FOREIGN KEY (author_id) REFERENCES public.user_accounts(id);
 
 
 --
@@ -133,3 +194,4 @@ CREATE UNIQUE INDEX user_accounts__lower_email_index ON public.user_accounts USI
 INSERT INTO public."schema_migrations" (version) VALUES (20210924135612);
 INSERT INTO public."schema_migrations" (version) VALUES (20210924135641);
 INSERT INTO public."schema_migrations" (version) VALUES (20210927160324);
+INSERT INTO public."schema_migrations" (version) VALUES (20230215172202);
