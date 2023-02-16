@@ -8,9 +8,14 @@ defmodule SntxGraph.BlogPostTypes do
     field :author, :user_account
   end
 
-  input_object :blog_post_input do
+  input_object :blog_post_create_input do
     field :title, non_null(:string)
     field :body, non_null(:string)
-    field :author_id, non_null(:uuid4)
+  end
+
+  input_object :blog_post_update_input do
+    field :id, non_null(:uuid4)
+    field :title, :string
+    field :body, :string
   end
 end

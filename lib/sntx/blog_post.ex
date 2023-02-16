@@ -29,6 +29,24 @@ defmodule Sntx.BlogPost do
     %__MODULE__{}
     |> changeset(attrs)
     |> Repo.insert()
+    |> case do
+      {:ok, blog_post} -> {:ok, Repo.preload(blog_post, [:author])}
+      error -> error
+    end
+  end
+
+  def update(old, params) do
+    old
+    |> changeset(params)
+    |> Repo.update()
+    |> case do
+      {:ok, blog_post} -> {:ok, Repo.preload(blog_post, [:author])}
+      error -> error
+    end
+  end
+
+  def delete(blog_post) do
+    Repo.delete(blog_post)
   end
 
   def list do
